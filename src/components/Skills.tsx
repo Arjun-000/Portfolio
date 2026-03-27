@@ -58,25 +58,31 @@ const skills: Skill[] = [
   },
 ];
 
-const SkillCard = ({ skill, isActive }: { skill: Skill; isActive: boolean }) => (
-  <div
-    className={`skill-card flex-shrink-0 flex flex-col gap-4 transition-all duration-300 ${
-      isActive ? "skill-card-active" : ""
-    }`}
-  >
-    {/* Icon circle */}
-    <div className="skill-icon-circle">
-      <span className="font-heading text-[15px] text-primary/70">{skill.abbr}</span>
+const SkillCard = ({ skill }: { skill: Skill }) => (
+  <div className="skill-card flex-shrink-0 flex flex-col gap-4 min-w-[260px] p-6 rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-md">
+    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
+      <span className="text-sm text-white/70">{skill.abbr}</span>
     </div>
     <div className="flex flex-col gap-2">
-      <h3 className="font-heading text-card-title text-primary">{skill.name}</h3>
-      <p className="text-muted-foreground text-body-sm leading-relaxed">{skill.description}</p>
+      <h3 className="text-white text-lg font-semibold">{skill.name}</h3>
+      <p className="text-white/60 text-sm leading-relaxed">
+        {skill.description}
+      </p>
     </div>
   </div>
 );
 
 const Skills = () => {
   const trackRef = useRef<HTMLDivElement>(null);
+  const autoScrollRef = useRef<number>(0);
+
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+  const directionRef = useRef(1); // 1 = right, -1 = left
+
+  const speed = 0.5;
+
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
@@ -87,65 +93,151 @@ const Skills = () => {
     setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 2);
   }, []);
 
+  /* ---------------- AUTO SCROLL ---------------- */
   useEffect(() => {
     const el = trackRef.current;
     if (!el) return;
-    updateScrollState();
-    el.addEventListener("scroll", updateScrollState, { passive: true });
-    window.addEventListener("resize", updateScrollState);
-    return () => {
-      el.removeEventListener("scroll", updateScrollState);
-      window.removeEventListener("resize", updateScrollState);
-    };
-  }, [updateScrollState]);
 
+    const step = () => {
+      if (!isDraggingRef.current) {
+        el.scrollLeft += speed * directionRef.current;
+
+        // Infinite loop
+        if (el.scrollLeft >= el.scrollWidth - el.clientWidth) {
+          el.scrollLeft = 0;
+        }
+
+        if (el.scrollLeft <= 0) {
+          el.scrollLeft = el.scrollWidth - el.clientWidth;
+        }
+      }
+
+      autoScrollRef.current = requestAnimationFrame(step);
+    };
+
+    autoScrollRef.current = requestAnimationFrame(step);
+
+    return () => cancelAnimationFrame(autoScrollRef.current);
+  }, []);
+
+  /* ---------------- DRAG SUPPORT ---------------- */
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+
+    const onMouseDown = (e: MouseEvent) => {
+      isDraggingRef.current = true;
+      startXRef.current = e.pageX - el.offsetLeft;
+      scrollLeftRef.current = el.scrollLeft;
+    };
+
+    const onMouseUp = (e: MouseEvent) => {
+      if (!isDraggingRef.current) return;
+
+      const endX = e.pageX - el.offsetLeft;
+      const walk = endX - startXRef.current;
+
+      // Change direction based on drag
+      directionRef.current = walk > 0 ? -1 : 1;
+
+      isDraggingRef.current = false;
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!isDraggingRef.current) return;
+      e.preventDefault();
+      const x = e.pageX - el.offsetLeft;
+      const walk = (x - startXRef.current) * 1.5;
+      el.scrollLeft = scrollLeftRef.current - walk;
+    };
+
+    const onMouseLeave = () => {
+      isDraggingRef.current = false;
+    };
+
+    /* Touch Support */
+    const onTouchStart = (e: TouchEvent) => {
+      isDraggingRef.current = true;
+      startXRef.current = e.touches[0].pageX - el.offsetLeft;
+      scrollLeftRef.current = el.scrollLeft;
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (!isDraggingRef.current) return;
+      const x = e.touches[0].pageX - el.offsetLeft;
+      const walk = (x - startXRef.current) * 1.5;
+      el.scrollLeft = scrollLeftRef.current - walk;
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      if (!isDraggingRef.current) return;
+
+      const endX = e.changedTouches[0].pageX - el.offsetLeft;
+      const walk = endX - startXRef.current;
+      directionRef.current = walk > 0 ? -1 : 1;
+
+      isDraggingRef.current = false;
+    };
+
+    el.addEventListener("mousedown", onMouseDown);
+    el.addEventListener("mousemove", onMouseMove);
+    el.addEventListener("mouseup", onMouseUp);
+    el.addEventListener("mouseleave", onMouseLeave);
+
+    el.addEventListener("touchstart", onTouchStart);
+    el.addEventListener("touchmove", onTouchMove);
+    el.addEventListener("touchend", onTouchEnd);
+
+    return () => {
+      el.removeEventListener("mousedown", onMouseDown);
+      el.removeEventListener("mousemove", onMouseMove);
+      el.removeEventListener("mouseup", onMouseUp);
+      el.removeEventListener("mouseleave", onMouseLeave);
+
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
+    };
+  }, []);
+
+  /* ---------------- MANUAL BUTTON SCROLL ---------------- */
   const scroll = (dir: number) => {
-    trackRef.current?.scrollBy({ left: dir * 280, behavior: "smooth" });
+    directionRef.current = dir;
   };
 
   return (
-    <section id="skills" className="section-secondary py-section-y px-6 md:px-section-x">
-      <div className="max-w-container mx-auto">
-        {/* Header with controls */}
-        <div className="flex items-end justify-between mb-10">
-          <div>
-            <h2 className="font-heading text-section text-primary mb-3">Skills</h2>
-            <p className="text-muted-foreground text-body-lg max-w-[480px]">
-              Technologies and tools I work with to build production-grade applications.
-            </p>
-          </div>
-          <div className="hidden md:flex items-center gap-2">
-            <button
-              onClick={() => scroll(-1)}
-              disabled={!canScrollLeft}
-              className="carousel-btn"
-              aria-label="Scroll left"
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <button
-              onClick={() => scroll(1)}
-              disabled={!canScrollRight}
-              className="carousel-btn"
-              aria-label="Scroll right"
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
+    <section id="skills" className="py-24 px-6 bg-[#0B0C10]">
+      <div className="max-w-7xl mx-auto mb-12 flex items-end justify-between">
+        <div>
+          <h2 className="text-3xl text-white font-semibold mb-3">Skills</h2>
+          <p className="text-white/60 max-w-md">
+            Technologies and tools I work with to build production-grade applications.
+          </p>
+        </div>
+
+        <div className="hidden md:flex gap-3">
+          <button
+            onClick={() => scroll(-1)}
+            className="p-2 rounded-full border border-white/20 text-white hover:bg-white/10 transition"
+          >
+            <ChevronLeft size={16} />
+          </button>
+          <button
+            onClick={() => scroll(1)}
+            className="p-2 rounded-full border border-white/20 text-white hover:bg-white/10 transition"
+          >
+            <ChevronRight size={16} />
+          </button>
         </div>
       </div>
 
-      {/* Carousel track */}
-      <div className="max-w-container mx-auto">
-        <div
-          ref={trackRef}
-          className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
-          {skills.map((skill) => (
-            <SkillCard key={skill.name} skill={skill} isActive={false} />
-          ))}
-        </div>
+      <div
+        ref={trackRef}
+        className="flex gap-6 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing"
+      >
+        {[...skills, ...skills].map((skill, index) => (
+          <SkillCard key={index} skill={skill} />
+        ))}
       </div>
     </section>
   );
