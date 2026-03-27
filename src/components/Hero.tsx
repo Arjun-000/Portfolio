@@ -28,7 +28,7 @@ const Hero = () => {
               border: '1px solid rgba(255,255,255,0.15)',
             }}
           >
-            Frontend Engineer · MERN Stack
+            Web Developer · MERN Stack
           </span>
 
           <h1 className="font-heading text-hero text-primary max-w-[600px]">
