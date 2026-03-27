@@ -1,41 +1,204 @@
-import { Home } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 const navLinks = [
-  { icon: <Home size={15} />, link: "#hero" },
+  { label: "HOME", link: "#hero" },
   { label: "PROJECTS", link: "#projects" },
   { label: "EXPERIENCE", link: "#experience" },
   { label: "EDUCATION", link: "#education" },
 ];
 
+const VS_SOURCE = `
+  attribute vec2 position;
+  void main() {
+    gl_Position = vec4(position, 0.0, 1.0);
+  }
+`;
+
+const FS_SOURCE = `
+  precision mediump float;
+  uniform vec2 uResolution;
+  uniform float uTime;
+  uniform vec2 uMouse;
+
+  void main() {
+    vec2 uv = gl_FragCoord.xy / uResolution.xy;
+
+    // Liquid glass distortion waves
+    float wave1 = sin(uv.x * 18.0 + uTime * 1.2) * 0.012;
+    float wave2 = sin(uv.y * 14.0 - uTime * 0.9) * 0.008;
+    float wave3 = sin((uv.x + uv.y) * 22.0 + uTime * 0.7) * 0.006;
+
+    // Mouse-reactive ripple
+    float dist = distance(uv, uMouse);
+    float ripple = smoothstep(0.35, 0.0, dist) * 0.08;
+
+    // Refraction-like color shift
+    vec2 distorted = uv + vec2(wave1 + wave2, wave2 + wave3);
+    float refract = sin(distorted.x * 30.0 + distorted.y * 20.0 + uTime) * 0.015;
+
+    // Base glass color with subtle gradient
+    vec3 baseColor = vec3(0.04, 0.04, 0.06);
+
+    // Specular highlight along top edge (frost bevel)
+    float topHighlight = smoothstep(0.7, 1.0, uv.y) * 0.12;
+
+    // Caustic-like light pattern
+    float caustic = sin(distorted.x * 40.0 + uTime * 1.5) * sin(distorted.y * 35.0 - uTime * 1.1);
+    caustic = caustic * caustic * 0.04;
+
+    vec3 color = baseColor;
+    color += vec3(wave1 + wave2 + wave3) * 0.5;
+    color += ripple * vec3(0.15, 0.15, 0.18);
+    color += refract;
+    color += topHighlight;
+    color += caustic;
+
+    // Subtle mouse glow
+    color += smoothstep(0.25, 0.0, dist) * vec3(0.06, 0.06, 0.08);
+
+    gl_FragColor = vec4(color, 0.38);
+  }
+`;
+
+function createShader(gl: WebGLRenderingContext, type: number, source: string) {
+  const shader = gl.createShader(type)!;
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  return shader;
+}
+
 const Navbar = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const navRef = useRef<HTMLElement>(null);
+  const mouseRef = useRef([0.5, 0.5]);
+  const rafRef = useRef<number>(0);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const nav = navRef.current;
+    if (!canvas || !nav) return;
+
+    const gl = canvas.getContext("webgl", {
+      alpha: true,
+      antialias: false,
+      powerPreference: "high-performance",
+    });
+    if (!gl) return;
+
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+    const program = gl.createProgram()!;
+    gl.attachShader(program, createShader(gl, gl.VERTEX_SHADER, VS_SOURCE));
+    gl.attachShader(program, createShader(gl, gl.FRAGMENT_SHADER, FS_SOURCE));
+    gl.linkProgram(program);
+    gl.useProgram(program);
+
+    const buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+
+    const pos = gl.getAttribLocation(program, "position");
+    gl.enableVertexAttribArray(pos);
+    gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+
+    const uResolution = gl.getUniformLocation(program, "uResolution");
+    const uTime = gl.getUniformLocation(program, "uTime");
+    const uMouse = gl.getUniformLocation(program, "uMouse");
+
+    function resize() {
+      canvas!.width = nav!.offsetWidth * (window.devicePixelRatio || 1);
+      canvas!.height = nav!.offsetHeight * (window.devicePixelRatio || 1);
+      gl!.viewport(0, 0, canvas!.width, canvas!.height);
+    }
+
+    resize();
+    window.addEventListener("resize", resize);
+
+    const onMouseMove = (e: MouseEvent) => {
+      const rect = nav!.getBoundingClientRect();
+      mouseRef.current = [
+        (e.clientX - rect.left) / rect.width,
+        1.0 - (e.clientY - rect.top) / rect.height,
+      ];
+    };
+    nav.addEventListener("mousemove", onMouseMove);
+
+    const start = performance.now();
+    function render() {
+      const time = (performance.now() - start) / 1000;
+      gl!.uniform2f(uResolution, canvas!.width, canvas!.height);
+      gl!.uniform1f(uTime, time);
+      gl!.uniform2f(uMouse, mouseRef.current[0], mouseRef.current[1]);
+      gl!.drawArrays(gl!.TRIANGLE_STRIP, 0, 4);
+      rafRef.current = requestAnimationFrame(render);
+    }
+    render();
+
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      window.removeEventListener("resize", resize);
+      nav.removeEventListener("mousemove", onMouseMove);
+    };
+  }, []);
+
   return (
-    <nav className="navbar-capsule">
-      {/* Left: Logo */}
-      <div className="flex items-center h-full">
-        <a
-          href="#hero"
-          className="px-5 h-full flex items-center font-heading text-[17px] text-primary border-r border-primary/10"
-        >
-          Arjun R
-        </a>
-      </div>
+    <nav ref={navRef} id="navbar" className="navbar-capsule">
+      {/* WebGL Glass Layer */}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: 0,
+          pointerEvents: "none",
+          borderRadius: "inherit",
+        }}
+      />
 
-      {/* Center: Nav Links */}
-      <div className="flex items-center gap-1">
-        {navLinks.map((item, i) => (
+      {/* Glass overlay */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 1,
+          background: "rgba(255,255,255,0.03)",
+          backdropFilter: "saturate(180%) brightness(1.1)",
+          borderRadius: "inherit",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Content Layer */}
+      <div className="relative z-[2] flex items-center justify-between w-full h-full">
+        {/* Left: Logo */}
+        <div className="flex items-center h-full">
           <a
-            key={i}
-            href={item.link}
-            className="nav-link-item flex items-center gap-1.5"
+            href="#hero"
+            className="px-5 h-full flex items-center font-heading text-[16px] text-primary border-r border-primary/10"
           >
-            {item.icon}
-            {item.label}
+            Arjun R
           </a>
-        ))}
-      </div>
+        </div>
 
-      {/* Right: placeholder */}
-      <div className="w-10" />
+        {/* Center: Nav Links */}
+        <div className="flex items-center gap-1">
+          {navLinks.map((item, i) => (
+            <a
+              key={i}
+              href={item.link}
+              className="nav-link-item flex items-center gap-1.5"
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
+
+        {/* Right: placeholder */}
+        <div className="w-10" />
+      </div>
     </nav>
   );
 };

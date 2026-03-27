@@ -131,7 +131,7 @@
   top: 14px;
   left: 24px;
   right: 24px;
-  height: 52px;
+  height: 56px;
   z-index: 999;
   background: rgba(10, 10, 10, 0.55);
   backdrop-filter: blur(32px) saturate(200%) brightness(0.9);
