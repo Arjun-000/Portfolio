@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const navLinks = [
   { label: "HOME", link: "#hero" },
+  { label: "SKILLS", link: "#skills" },
   { label: "PROJECTS", link: "#projects" },
   { label: "EXPERIENCE", link: "#experience" },
   { label: "EDUCATION", link: "#education" },
@@ -22,40 +23,24 @@ const FS_SOURCE = `
 
   void main() {
     vec2 uv = gl_FragCoord.xy / uResolution.xy;
-
-    // Liquid glass distortion waves
     float wave1 = sin(uv.x * 18.0 + uTime * 1.2) * 0.012;
     float wave2 = sin(uv.y * 14.0 - uTime * 0.9) * 0.008;
     float wave3 = sin((uv.x + uv.y) * 22.0 + uTime * 0.7) * 0.006;
-
-    // Mouse-reactive ripple
     float dist = distance(uv, uMouse);
     float ripple = smoothstep(0.35, 0.0, dist) * 0.08;
-
-    // Refraction-like color shift
     vec2 distorted = uv + vec2(wave1 + wave2, wave2 + wave3);
     float refract = sin(distorted.x * 30.0 + distorted.y * 20.0 + uTime) * 0.015;
-
-    // Base glass color with subtle gradient
     vec3 baseColor = vec3(0.04, 0.04, 0.06);
-
-    // Specular highlight along top edge (frost bevel)
     float topHighlight = smoothstep(0.7, 1.0, uv.y) * 0.12;
-
-    // Caustic-like light pattern
     float caustic = sin(distorted.x * 40.0 + uTime * 1.5) * sin(distorted.y * 35.0 - uTime * 1.1);
     caustic = caustic * caustic * 0.04;
-
     vec3 color = baseColor;
     color += vec3(wave1 + wave2 + wave3) * 0.5;
     color += ripple * vec3(0.15, 0.15, 0.18);
     color += refract;
     color += topHighlight;
     color += caustic;
-
-    // Subtle mouse glow
     color += smoothstep(0.25, 0.0, dist) * vec3(0.06, 0.06, 0.08);
-
     gl_FragColor = vec4(color, 0.38);
   }
 `;
@@ -72,6 +57,27 @@ const Navbar = () => {
   const navRef = useRef<HTMLElement>(null);
   const mouseRef = useRef([0.5, 0.5]);
   const rafRef = useRef<number>(0);
+  const [activeSection, setActiveSection] = useState("#hero");
+
+  // Track active section via IntersectionObserver
+  useEffect(() => {
+    const ids = navLinks.map((l) => l.link.replace("#", ""));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(`#${entry.target.id}`);
+          }
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px" }
+    );
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -144,7 +150,6 @@ const Navbar = () => {
 
   return (
     <nav ref={navRef} id="navbar" className="navbar-capsule">
-      {/* WebGL Glass Layer */}
       <canvas
         ref={canvasRef}
         style={{
@@ -157,8 +162,6 @@ const Navbar = () => {
           borderRadius: "inherit",
         }}
       />
-
-      {/* Glass overlay */}
       <div
         style={{
           position: "absolute",
@@ -171,9 +174,7 @@ const Navbar = () => {
         }}
       />
 
-      {/* Content Layer */}
       <div className="relative z-[2] flex items-center justify-between w-full h-full">
-        {/* Left: Logo */}
         <div className="flex items-center h-full">
           <a
             href="#hero"
@@ -183,20 +184,20 @@ const Navbar = () => {
           </a>
         </div>
 
-        {/* Center: Nav Links */}
         <div className="flex items-center gap-1">
-          {navLinks.map((item, i) => (
+          {navLinks.map((item) => (
             <a
-              key={i}
+              key={item.link}
               href={item.link}
-              className="nav-link-item flex items-center gap-1.5"
+              className={`nav-link-item flex items-center gap-1.5 ${
+                activeSection === item.link ? "nav-link-active" : ""
+              }`}
             >
               {item.label}
             </a>
           ))}
         </div>
 
-        {/* Right: placeholder */}
         <div className="w-10" />
       </div>
     </nav>
