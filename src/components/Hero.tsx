@@ -58,7 +58,7 @@ const Hero = () => {
             }}
           >
             <img
-              src="/images/arjun-profile.jpg"
+              src="/images/arjun-profile.png"
               alt="Arjun R — Frontend Engineer"
               className="w-full h-full object-cover"
               onError={(e) => {
