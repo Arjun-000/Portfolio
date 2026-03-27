@@ -14,14 +14,15 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['Space Grotesk', 'sans-serif'],
+        heading: ['DM Serif Display', 'serif'],
         body: ['Inter', 'sans-serif'],
       },
       fontSize: {
-        'hero': ['64px', { lineHeight: '1.1', fontWeight: '700' }],
-        'section': ['40px', { lineHeight: '1.2', fontWeight: '600' }],
-        'card-title': ['22px', { lineHeight: '1.4', fontWeight: '600' }],
-        'body-lg': ['18px', { lineHeight: '1.7' }],
+        'hero': ['48px', { lineHeight: '1.12', fontWeight: '400' }],
+        'section': ['32px', { lineHeight: '1.2', fontWeight: '400' }],
+        'card-title': ['15px', { lineHeight: '1.4', fontWeight: '600' }],
+        'body-lg': ['15px', { lineHeight: '1.75' }],
+        'body-sm': ['12px', { lineHeight: '1.6' }],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -64,10 +65,10 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       spacing: {
-        'section-y': '140px',
-        'section-x': '96px',
-        'card-p': '36px',
-        'grid-gap': '48px',
+        'section-y': '80px',
+        'section-x': '48px',
+        'card-p': '22px',
+        'grid-gap': '24px',
       },
       maxWidth: {
         'container': '1240px',
