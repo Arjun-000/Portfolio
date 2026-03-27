@@ -1,43 +1,32 @@
-import { Briefcase, GraduationCap } from "lucide-react";
+import { Briefcase } from "lucide-react";
 
 const Experience = () => {
   return (
     <section id="experience" className="section-primary py-section-y px-6 md:px-section-x">
-      <div className="max-w-container mx-auto flex flex-col gap-24">
-        {/* Professional Experience */}
-        <div>
-          <div className="flex items-center gap-3 mb-10">
-            <Briefcase size={24} className="text-primary" />
-            <h2 className="font-heading text-3xl md:text-section text-primary">Professional Experience</h2>
-          </div>
-          <div className="glass-card p-card-p hover:translate-y-0">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-3">
-              <h3 className="font-heading text-card-title text-primary">MERN Stack Developer Intern</h3>
-              <span className="text-muted-foreground text-sm">2024</span>
-            </div>
-            <p className="text-primary/80 font-medium mb-3">Luminar Technolabs</p>
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              Developed modular React components, integrated RESTful APIs, improved frontend performance, and collaborated in an agile workflow environment.
-            </p>
-          </div>
+      <div className="max-w-container mx-auto">
+        <div className="mb-10">
+          <h2 className="font-heading text-section text-primary mb-3">Work Experience</h2>
+          <p className="text-muted-foreground text-body-lg">Professional roles and internships.</p>
         </div>
 
-        {/* Education */}
-        <div>
-          <div className="flex items-center gap-3 mb-10">
-            <GraduationCap size={24} className="text-primary" />
-            <h2 className="font-heading text-3xl md:text-section text-primary">Education</h2>
+        <div className="timeline-card">
+          <div className="flex items-center gap-2 mb-1">
+            <span
+              className="px-2 py-0.5 text-[11px] rounded-full text-muted-foreground"
+              style={{
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.08)',
+              }}
+            >
+              Internship
+            </span>
+            <span className="text-muted-foreground text-body-sm ml-auto">2024</span>
           </div>
-          <div className="glass-card p-card-p hover:translate-y-0">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-3">
-              <h3 className="font-heading text-card-title text-primary">B.Tech — Computer Science and Engineering</h3>
-              <span className="text-muted-foreground text-sm">Graduated</span>
-            </div>
-            <p className="text-primary/80 font-medium mb-3">College of Engineering and Management Punnapra</p>
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              Specialized in full-stack development, data structures, and scalable application architecture.
-            </p>
-          </div>
+          <h3 className="font-heading text-card-title text-primary timeline-role">MERN Stack Developer Intern</h3>
+          <p className="text-primary/60 text-body-sm mt-1">Luminar Technolabs</p>
+          <p className="text-muted-foreground text-body-sm leading-relaxed mt-3">
+            Developed modular React components, integrated RESTful APIs, improved frontend performance, and collaborated in an agile workflow environment. Focused on component-driven architecture and clean code practices.
+          </p>
         </div>
       </div>
     </section>

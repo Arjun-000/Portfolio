@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,27 +6,27 @@
 
 @layer base {
   :root {
-    --background: 220 50% 8%;
-    --background-secondary: 222 47% 10%;
+    --background: 0 0% 0%;
+    --background-secondary: 0 0% 4%;
     --foreground: 220 30% 93%;
 
-    --card: 0 0% 100%;
+    --card: 0 0% 7%;
     --card-foreground: 0 0% 100%;
 
-    --popover: 220 50% 8%;
+    --popover: 0 0% 0%;
     --popover-foreground: 220 30% 93%;
 
     --primary: 0 0% 100%;
-    --primary-foreground: 220 50% 8%;
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 222 47% 10%;
+    --secondary: 0 0% 4%;
     --secondary-foreground: 220 30% 93%;
 
     --muted: 220 15% 20%;
-    --muted-foreground: 218 15% 65%;
+    --muted-foreground: 215 12% 63%;
 
     --accent: 0 0% 100%;
-    --accent-foreground: 220 50% 8%;
+    --accent-foreground: 0 0% 0%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -35,18 +35,19 @@
     --input: 0 0% 100%;
     --ring: 0 0% 100%;
 
-    --radius: 24px;
+    --radius: 20px;
 
-    --font-heading: 'Space Grotesk', sans-serif;
+    --font-heading: 'DM Serif Display', serif;
     --font-body: 'Inter', sans-serif;
 
-    --card-bg: rgba(255, 255, 255, 0.04);
+    --card-bg: #111111;
     --card-border: rgba(255, 255, 255, 0.08);
-    --blur-overlay: rgba(255, 255, 255, 0.06);
-    --accent-subtle: rgba(255, 255, 255, 0.12);
+    --blur-overlay: rgba(10, 10, 10, 0.55);
+    --accent-subtle: rgba(255, 255, 255, 0.09);
 
-    --shadow-card-hover: 0 20px 60px rgba(0, 0, 0, 0.45);
-    --transition-default: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-card-hover: 0 24px 60px rgba(0, 0, 0, 0.6);
+    --transition-default: all 0.25s ease;
+    --transition-card: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
@@ -68,15 +69,34 @@
 @layer utilities {
   .glass-card {
     background: var(--card-bg);
-    backdrop-filter: blur(12px);
     border: 1px solid var(--card-border);
     border-radius: var(--radius);
-    transition: var(--transition-default);
+    transition: var(--transition-card);
   }
 
   .glass-card:hover {
-    transform: translateY(-8px);
+    transform: scale(1.03) translateY(-4px);
     box-shadow: var(--shadow-card-hover);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+
+  .timeline-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 22px 26px;
+    transition: var(--transition-default);
+  }
+
+  .timeline-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateX(4px);
+  }
+
+  .timeline-card:hover .timeline-role {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
   }
 
   .btn-pill {
@@ -85,8 +105,9 @@
   }
 
   .btn-pill:hover {
-    transform: scale(1.05);
-    background: var(--accent-subtle);
+    transform: scale(1.03);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.4);
   }
 
   .section-primary {
@@ -96,8 +117,121 @@
   .section-secondary {
     background: hsl(var(--background-secondary));
   }
+
+  .hover-underline:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
 }
 
+/* Navbar */
+.navbar-capsule {
+  position: fixed;
+  top: 14px;
+  left: 24px;
+  right: 24px;
+  height: 52px;
+  z-index: 999;
+  background: rgba(10, 10, 10, 0.55);
+  backdrop-filter: blur(32px) saturate(200%) brightness(0.9);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-top-color: rgba(255, 255, 255, 0.28);
+  border-bottom-color: rgba(0, 0, 0, 0.6);
+  border-radius: 9999px;
+  box-shadow:
+    0 2px 0 0 rgba(255, 255, 255, 0.07) inset,
+    0 -1px 0 0 rgba(0, 0, 0, 0.5) inset,
+    0 12px 40px rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px 0 0;
+  overflow: hidden;
+  perspective: 800px;
+  transition: transform 0.2s ease;
+}
+
+.navbar-capsule::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 50%;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.navbar-capsule::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+  animation: shimmer 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0%, 100% { left: -100%; }
+  50% { left: 100%; }
+}
+
+.nav-link-item {
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.55);
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  font-family: var(--font-body);
+}
+
+.nav-link-item:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Liquid Glass Hero */
+.liquid-glass-canvas {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.liquid-blob {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+  opacity: 0.55;
+  filter: blur(60px);
+  animation: blob-float 12s ease-in-out infinite alternate;
+}
+
+@keyframes blob-float {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.1); }
+  66% { transform: translate(-20px, 15px) scale(0.9); }
+  100% { transform: translate(10px, -10px) scale(1.05); }
+}
+
+.liquid-blob:nth-child(2) { animation-delay: -2s; animation-duration: 15s; }
+.liquid-blob:nth-child(3) { animation-delay: -4s; animation-duration: 18s; }
+.liquid-blob:nth-child(4) { animation-delay: -6s; animation-duration: 13s; }
+.liquid-blob:nth-child(5) { animation-delay: -8s; animation-duration: 16s; }
+.liquid-blob:nth-child(6) { animation-delay: -3s; animation-duration: 14s; }
+.liquid-blob:nth-child(7) { animation-delay: -5s; animation-duration: 17s; }
+
+/* Animations */
 @keyframes fade-in-up {
   from {
     opacity: 0;
