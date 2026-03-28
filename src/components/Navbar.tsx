@@ -69,7 +69,7 @@ const Navbar = () => {
           if (entry.isIntersecting) setActiveSection(`#${entry.target.id}`);
         });
       },
-      { rootMargin: "-40% 0px -55% 0px" }
+      { rootMargin: "-30% 0px -40% 0px", threshold: 0 }
     );
     ids.forEach((id) => {
       const el = document.getElementById(id);
