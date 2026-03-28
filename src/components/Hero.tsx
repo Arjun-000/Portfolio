@@ -1,3 +1,5 @@
+import ScrollReveal from "./ScrollReveal";
+
 const blobStyles = [
   { width: 180, height: 180, top: '10%', left: '5%' },
   { width: 140, height: 140, top: '60%', left: '15%' },
@@ -15,14 +17,12 @@ const Hero = () => {
       className="section-primary relative overflow-hidden"
       style={{ paddingTop: '140px', paddingBottom: '80px' }}
     >
-      {/* Liquid Glass Blobs */}
       <div className="liquid-glass-canvas">
         {blobStyles.map((style, i) => (
           <div key={i} className="liquid-blob" style={style} />
         ))}
       </div>
 
-      {/* Subtle grid overlay */}
       <div
         className="absolute inset-0 pointer-events-none z-[1]"
         style={{
@@ -32,50 +32,47 @@ const Hero = () => {
         }}
       />
 
-      <div className="max-w-container mx-auto flex flex-col lg:flex-row items-center gap-16 relative z-[2] px-6 md:px-section-x">
+      <div className="max-w-[1200px] mx-auto flex flex-col lg:flex-row items-center gap-16 relative z-[2] px-6 md:px-12">
         <div className="flex-1 flex flex-col gap-6 animate-fade-in-up">
-          {/* Badge */}
           <span className="hero-badge">
             <span className="hero-badge-dot" />
-            Frontend Engineer · MERN Stack
+            Frontend Developer
           </span>
 
-          <h1 className="font-heading text-hero text-primary max-w-[600px]">
-            Frontend Engineer Crafting High‑Performance Digital Products
+          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-primary max-w-[600px] leading-tight">
+            Arjun R
           </h1>
 
-          <p className="text-body-lg text-foreground max-w-[520px] leading-relaxed">
-            I design and build scalable, production-grade web applications using React, Node.js,
-            and modern frontend architecture. My focus is performance, maintainability, and
-            delivering measurable user impact.
+          <p className="text-lg text-foreground max-w-[520px] leading-relaxed">
+            Frontend Developer building production-grade web experiences. I specialize in crafting
+            scalable, performant, and visually refined applications using modern frontend technologies.
           </p>
 
-          <p className="text-body-sm text-muted-foreground max-w-[480px]">
-            Currently specializing in MERN stack, 3D web experiences, and real-time systems.
+          <p className="text-sm text-muted-foreground max-w-[480px]">
+            My focus is on clean architecture, intuitive interfaces, and delivering real-world impact through code.
           </p>
 
           <div className="flex items-center gap-4 mt-2">
             <a
               href="#projects"
-              className="btn-pill inline-flex items-center justify-center px-8 py-3.5 border border-primary/20 text-primary font-medium text-body-lg"
+              className="btn-pill inline-flex items-center justify-center px-8 py-3.5 border border-primary/20 text-primary font-medium text-lg"
             >
-              Explore Selected Work →
+              View Projects →
             </a>
             <a
               href="#skills"
-              className="text-body-sm text-muted-foreground hover:text-primary transition-colors hover-underline"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors hover-underline"
             >
               View Skills
             </a>
           </div>
         </div>
 
-        {/* Avatar Card */}
         <div className="animate-fade-in-delay flex-shrink-0">
           <div className="hero-avatar-card">
             <img
               src="/images/arjun-profile.png"
-              alt="Arjun R — Frontend Engineer"
+              alt="Arjun R — Frontend Developer"
               className="w-full h-full object-cover"
               onError={(e) => {
                 const target = e.currentTarget;

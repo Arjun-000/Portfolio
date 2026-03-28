@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Menu, X } from "lucide-react";
 
 const navLinks = [
   { label: "HOME", link: "#hero" },
@@ -6,6 +7,7 @@ const navLinks = [
   { label: "PROJECTS", link: "#projects" },
   { label: "EXPERIENCE", link: "#experience" },
   { label: "EDUCATION", link: "#education" },
+  { label: "CONTACT", link: "#contact" },
 ];
 
 const VS_SOURCE = `
@@ -20,7 +22,6 @@ const FS_SOURCE = `
   uniform vec2 uResolution;
   uniform float uTime;
   uniform vec2 uMouse;
-
   void main() {
     vec2 uv = gl_FragCoord.xy / uResolution.xy;
     float wave1 = sin(uv.x * 18.0 + uTime * 1.2) * 0.012;
@@ -58,16 +59,14 @@ const Navbar = () => {
   const mouseRef = useRef([0.5, 0.5]);
   const rafRef = useRef<number>(0);
   const [activeSection, setActiveSection] = useState("#hero");
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Track active section via IntersectionObserver
   useEffect(() => {
     const ids = navLinks.map((l) => l.link.replace("#", ""));
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(`#${entry.target.id}`);
-          }
+          if (entry.isIntersecting) setActiveSection(`#${entry.target.id}`);
         });
       },
       { rootMargin: "-40% 0px -55% 0px" }
@@ -84,11 +83,7 @@ const Navbar = () => {
     const nav = navRef.current;
     if (!canvas || !nav) return;
 
-    const gl = canvas.getContext("webgl", {
-      alpha: true,
-      antialias: false,
-      powerPreference: "high-performance",
-    });
+    const gl = canvas.getContext("webgl", { alpha: true, antialias: false, powerPreference: "high-performance" });
     if (!gl) return;
 
     gl.enable(gl.BLEND);
@@ -149,58 +144,64 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav ref={navRef} id="navbar" className="navbar-capsule">
-      <canvas
-        ref={canvasRef}
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          zIndex: 0,
-          pointerEvents: "none",
-          borderRadius: "inherit",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          zIndex: 1,
-          background: "rgba(255,255,255,0.03)",
-          backdropFilter: "saturate(180%) brightness(1.1)",
-          borderRadius: "inherit",
-          pointerEvents: "none",
-        }}
-      />
+    <>
+      <nav ref={navRef} id="navbar" className="navbar-capsule">
+        <canvas
+          ref={canvasRef}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 0, pointerEvents: "none", borderRadius: "inherit" }}
+        />
+        <div style={{ position: "absolute", inset: 0, zIndex: 1, background: "rgba(255,255,255,0.03)", backdropFilter: "saturate(180%) brightness(1.1)", borderRadius: "inherit", pointerEvents: "none" }} />
 
-      <div className="relative z-[2] flex items-center justify-between w-full h-full">
-        <div className="flex items-center h-full">
-          <a
-            href="#hero"
-            className="px-5 h-full flex items-center font-heading text-[16px] text-primary border-r border-primary/10"
-          >
-            Arjun R
-          </a>
-        </div>
-
-        <div className="flex items-center gap-1">
-          {navLinks.map((item) => (
-            <a
-              key={item.link}
-              href={item.link}
-              className={`nav-link-item flex items-center gap-1.5 ${
-                activeSection === item.link ? "nav-link-active" : ""
-              }`}
-            >
-              {item.label}
+        <div className="relative z-[2] flex items-center justify-between w-full h-full">
+          <div className="flex items-center h-full">
+            <a href="#hero" className="px-5 h-full flex items-center gap-2 border-r border-primary/10">
+              <img src="/logo.png" alt="AR Logo" className="w-6 h-6 invert" />
+              <span className="font-heading text-[16px] font-semibold text-primary">Arjun R</span>
             </a>
-          ))}
-        </div>
+          </div>
 
-        <div className="w-10" />
+          {/* Desktop links */}
+          <div className="hidden md:flex items-center gap-1">
+            {navLinks.map((item) => (
+              <a
+                key={item.link}
+                href={item.link}
+                className={`nav-link-item flex items-center gap-1.5 ${activeSection === item.link ? "nav-link-active" : ""}`}
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
+
+          {/* Mobile hamburger */}
+          <button
+            className="md:hidden relative z-[3] p-2 text-primary"
+            onClick={() => setMobileOpen(!mobileOpen)}
+          >
+            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+
+          <div className="hidden md:block w-10" />
+        </div>
+      </nav>
+
+      {/* Mobile menu */}
+      <div className={`mobile-menu-overlay ${mobileOpen ? "open" : ""}`} onClick={() => setMobileOpen(false)} />
+      <div className={`mobile-menu ${mobileOpen ? "open" : ""}`}>
+        {navLinks.map((item) => (
+          <a
+            key={item.link}
+            href={item.link}
+            onClick={() => setMobileOpen(false)}
+            className={`block py-3 px-4 text-sm font-medium rounded-lg transition-colors ${
+              activeSection === item.link ? "text-primary bg-white/5" : "text-muted-foreground hover:text-primary"
+            }`}
+          >
+            {item.label}
+          </a>
+        ))}
       </div>
-    </nav>
+    </>
   );
 };
 
