@@ -55,7 +55,7 @@ const Hero = () => {
           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mt-2">
             <a
               href="#projects"
-              className="btn-pill inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-3.5 border border-primary/20 text-primary font-medium text-base sm:text-lg"
+              className="btn-pill inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-3.5 border border-accent/40 text-accent hover:bg-accent hover:text-accent-foreground font-medium text-base sm:text-lg transition-colors"
             >
               View Projects →
             </a>
