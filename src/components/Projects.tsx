@@ -127,18 +127,18 @@ const ProjectCard = ({ project }: { project: Project }) => {
 
 const Projects = () => {
   return (
-    <section id="projects" className="section-secondary py-[120px] px-6 md:px-12">
+    <section id="projects" className="section-secondary py-20 md:py-[120px] px-4 sm:px-6 md:px-12">
       <div className="max-w-[1200px] mx-auto">
         <ScrollReveal>
-          <div className="mb-10">
-            <h2 className="font-heading text-3xl font-bold text-primary mb-3">Selected Projects</h2>
-            <p className="text-muted-foreground text-lg max-w-[600px]">
+          <div className="mb-8 md:mb-10">
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-primary mb-3">Selected Projects</h2>
+            <p className="text-muted-foreground text-base sm:text-lg max-w-[600px]">
               Engineered with scalability, performance, and clean architecture in mind.
             </p>
           </div>
         </ScrollReveal>
         <ScrollReveal delay={0.15}>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {projects.map((p) => (
               <ProjectCard key={p.title} project={p} />
             ))}
