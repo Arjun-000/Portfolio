@@ -191,13 +191,13 @@ const Skills = () => {
   const scroll = useCallback((dir: number) => { directionRef.current = dir; }, []);
 
   return (
-    <section id="skills" className="section-secondary py-[120px] px-6 md:px-12">
+    <section id="skills" className="section-secondary py-20 md:py-[120px] px-4 sm:px-6 md:px-12">
       <div className="max-w-[1200px] mx-auto">
         <ScrollReveal>
-          <div className="mb-12 flex items-end justify-between">
+          <div className="mb-8 md:mb-12 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
-              <h2 className="font-heading text-3xl font-bold text-primary mb-3">Skills</h2>
-              <p className="text-muted-foreground text-lg max-w-md">
+              <h2 className="font-heading text-2xl sm:text-3xl font-bold text-primary mb-3">Skills</h2>
+              <p className="text-muted-foreground text-base sm:text-lg max-w-md">
                 Technologies and tools I work with to build production-grade applications.
               </p>
             </div>
@@ -210,7 +210,7 @@ const Skills = () => {
 
         <div
           ref={trackRef}
-          className="flex gap-6 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing"
+          className="flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing"
         >
           {[...skills, ...skills].map((skill, index) => (
             <SkillCard key={index} skill={skill} />
