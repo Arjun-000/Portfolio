@@ -207,7 +207,7 @@
 
 .loading-progress-bar {
   height: 100%;
-  background: hsl(var(--primary));
+  background: hsl(var(--accent));
   border-radius: 2px;
   animation: progress-fill 2s ease-out forwards;
 }
@@ -381,17 +381,18 @@
   padding: 6px 16px;
   border-radius: 9999px;
   font-size: 12px;
-  color: hsl(var(--muted-foreground));
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: hsl(var(--accent));
+  background: hsl(var(--accent) / 0.08);
+  border: 1px solid hsl(var(--accent) / 0.22);
   letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .hero-badge-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.4);
+  background: hsl(var(--accent));
   animation: pulse-dot 2s ease-in-out infinite;
 }
 
