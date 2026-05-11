@@ -13,52 +13,76 @@ interface Skill {
 const skills: Skill[] = [
   {
     name: "JavaScript",
-    description: "Modern ES6+, async programming, performance optimization.",
+    description: "Modern ES6+, async patterns, and performance-focused frontend logic.",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
-    alt: "JavaScript official logo",
+    alt: "JavaScript logo",
+  },
+  {
+    name: "TypeScript",
+    description: "Strongly-typed application code for safer refactors and APIs.",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+    alt: "TypeScript logo",
   },
   {
     name: "React.js",
-    description: "Component-driven architecture with hooks and state management.",
+    description: "Component-driven UIs with hooks, routing and state management.",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-    alt: "React.js official logo",
+    alt: "React.js logo",
   },
   {
     name: "Node.js",
-    description: "Event-driven backend services and API development.",
+    description: "Event-driven backend services and REST API development.",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
-    alt: "Node.js official logo",
+    alt: "Node.js logo",
   },
   {
     name: "Express.js",
-    description: "RESTful API architecture using middleware patterns.",
+    description: "RESTful API architecture using middleware patterns and MVC.",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
-    alt: "Express.js official logo",
+    alt: "Express.js logo",
     invert: true,
   },
   {
     name: "MongoDB",
-    description: "Schema-flexible NoSQL database with aggregation pipelines.",
+    description: "Schema design, aggregation pipelines and Mongoose modelling.",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
-    alt: "MongoDB official logo",
+    alt: "MongoDB logo",
   },
   {
-    name: "Python",
-    description: "Automation, backend scripting, and ML integrations.",
-    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
-    alt: "Python official logo",
+    name: "MySQL",
+    description: "Relational schema design, joins and optimized SQL queries.",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg",
+    alt: "MySQL logo",
+  },
+  {
+    name: "HTML5",
+    description: "Semantic markup, accessibility, and SEO-friendly structure.",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
+    alt: "HTML5 logo",
+  },
+  {
+    name: "CSS3",
+    description: "Modern layouts with Flexbox, Grid and fluid responsive design.",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
+    alt: "CSS3 logo",
   },
   {
     name: "Bootstrap",
     description: "Responsive UI system with grid and utility classes.",
     logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg",
-    alt: "Bootstrap official logo",
+    alt: "Bootstrap logo",
   },
   {
     name: "Tailwind CSS",
-    description: "Utility-first styling with design token consistency.",
+    description: "Utility-first styling with consistent design tokens.",
     logo: "https://upload.wikimedia.org/wikipedia/commons/d/d5/Tailwind_CSS_Logo.svg",
-    alt: "Tailwind CSS official logo",
+    alt: "Tailwind CSS logo",
+  },
+  {
+    name: "Java",
+    description: "OOP fundamentals and core problem-solving foundation.",
+    logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg",
+    alt: "Java logo",
   },
 ];
 
@@ -167,13 +191,13 @@ const Skills = () => {
   const scroll = useCallback((dir: number) => { directionRef.current = dir; }, []);
 
   return (
-    <section id="skills" className="section-secondary py-[120px] px-6 md:px-12">
+    <section id="skills" className="section-secondary py-20 md:py-[120px] px-4 sm:px-6 md:px-12">
       <div className="max-w-[1200px] mx-auto">
         <ScrollReveal>
-          <div className="mb-12 flex items-end justify-between">
+          <div className="mb-8 md:mb-12 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
-              <h2 className="font-heading text-3xl font-bold text-primary mb-3">Skills</h2>
-              <p className="text-muted-foreground text-lg max-w-md">
+              <h2 className="font-heading text-2xl sm:text-3xl font-bold text-primary mb-3">Skills</h2>
+              <p className="text-muted-foreground text-base sm:text-lg max-w-md">
                 Technologies and tools I work with to build production-grade applications.
               </p>
             </div>
@@ -186,7 +210,7 @@ const Skills = () => {
 
         <div
           ref={trackRef}
-          className="flex gap-6 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing"
+          className="flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing"
         >
           {[...skills, ...skills].map((skill, index) => (
             <SkillCard key={index} skill={skill} />

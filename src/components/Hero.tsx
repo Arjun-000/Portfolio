@@ -14,8 +14,7 @@ const Hero = () => {
   return (
     <section
       id="hero"
-      className="section-primary relative overflow-hidden"
-      style={{ paddingTop: '140px', paddingBottom: '80px' }}
+      className="section-primary relative overflow-hidden pt-28 pb-16 md:pt-[140px] md:pb-20"
     >
       <div className="liquid-glass-canvas">
         {blobStyles.map((style, i) => (
@@ -32,38 +31,39 @@ const Hero = () => {
         }}
       />
 
-      <div className="max-w-[1200px] mx-auto flex flex-col lg:flex-row items-center gap-16 relative z-[2] px-6 md:px-12">
-        <div className="flex-1 flex flex-col gap-6 animate-fade-in-up">
+      <div className="max-w-[1200px] mx-auto flex flex-col-reverse lg:flex-row items-center gap-10 lg:gap-16 relative z-[2] px-4 sm:px-6 md:px-12">
+        <div className="flex-1 flex flex-col gap-5 md:gap-6 animate-fade-in-up text-center lg:text-left items-center lg:items-start">
           <span className="hero-badge">
             <span className="hero-badge-dot" />
-            Frontend Developer
+            MERN Stack Developer · Alappuzha, India
           </span>
 
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-primary max-w-[600px] leading-tight">
+          <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-primary max-w-[600px] leading-tight">
             Arjun R
           </h1>
 
-          <p className="text-lg text-foreground max-w-[520px] leading-relaxed">
-            Frontend Developer building production-grade web experiences. I specialize in crafting
-            scalable, performant, and visually refined applications using modern frontend technologies.
+          <p className="text-base sm:text-lg text-foreground max-w-[520px] leading-relaxed">
+            Detail-oriented MERN Stack Developer with hands-on experience designing and building
+            end-to-end web applications using MongoDB, Express.js, React.js, and Node.js.
           </p>
 
           <p className="text-sm text-muted-foreground max-w-[480px]">
-            My focus is on clean architecture, intuitive interfaces, and delivering real-world impact through code.
+            Skilled in REST API development, JWT authentication, database schema design, and
+            building user-friendly, performant interfaces.
           </p>
 
-          <div className="flex items-center gap-4 mt-2">
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mt-2">
             <a
               href="#projects"
-              className="btn-pill inline-flex items-center justify-center px-8 py-3.5 border border-primary/20 text-primary font-medium text-lg"
+              className="btn-pill inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-3.5 border border-primary/20 text-primary font-medium text-base sm:text-lg"
             >
               View Projects →
             </a>
             <a
-              href="#skills"
+              href="#contact"
               className="text-sm text-muted-foreground hover:text-primary transition-colors hover-underline"
             >
-              View Skills
+              Get in touch
             </a>
           </div>
         </div>

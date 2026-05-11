@@ -13,48 +13,45 @@ interface Project {
 
 const projects: Project[] = [
   {
-    icon: <Box size={38} />,
-    title: "3D Model Viewer Application",
-    description: "Interactive GLB model viewer built with React and Three.js.",
-    tags: ["Three.js", "React", "GLTF", "MongoDB Atlas"],
+    icon: <Shield size={38} />,
+    title: "Organ Donation Management System",
+    description: "Full-stack MERN system for donor-recipient workflows with JWT auth.",
+    tags: ["MongoDB", "Express", "React", "Node.js", "JWT", "Bootstrap"],
     links: [
-      { label: "Live Demo", icon: "external-link", url: "https://your-live-link.com" },
-      { label: "GitHub", icon: "github", url: "https://github.com/your-repo" },
+      { label: "GitHub", icon: "github", url: "https://github.com/Arjun-000" },
     ],
     sections: [
-      { heading: "What", text: "A full-stack web application allowing users to upload and render 3D GLB models directly in the browser." },
-      { heading: "Why", text: "Built to understand real-time rendering, WebGL pipelines, and performance optimization in modern web applications." },
-      { heading: "How", text: "Developed using React, Three.js, Node.js, and MongoDB Atlas for metadata storage and deployment scalability." },
+      { heading: "What", text: "A full-stack web application for donor registration, recipient management, and availability tracking with secure authentication." },
+      { heading: "Why", text: "Built to model real-world database relationships, role-based access, and end-to-end MERN application architecture." },
+      { heading: "How", text: "Implemented RESTful APIs in Express, MongoDB schemas, JWT-protected routes, MVC backend structure, and a responsive React + Bootstrap UI." },
     ],
   },
   {
-    icon: <Shield size={38} />,
-    title: "Organ Donation Management System",
-    description: "Full-stack system for managing donor-recipient workflows.",
-    tags: ["React", "Express", "MongoDB", "REST API"],
+    icon: <Box size={38} />,
+    title: "Desti — Travel CRUD App",
+    description: "React + JSON Server CRUD app with reusable components and dynamic routing.",
+    tags: ["React", "JSON Server", "Bootstrap", "REST API"],
     links: [
-      { label: "Live Demo", icon: "external-link", url: "https://your-live-link.com" },
-      { label: "GitHub", icon: "github", url: "https://github.com/your-repo" },
+      { label: "GitHub", icon: "github", url: "https://github.com/Arjun-000" },
     ],
     sections: [
-      { heading: "What", text: "A centralized system for tracking organ donors, recipients, and hospital approvals." },
-      { heading: "Why", text: "Designed to simulate real-world database relationships and workflow automation." },
-      { heading: "How", text: "Built using MERN stack with secure routing and structured backend APIs." },
+      { heading: "What", text: "A CRUD-based travel destinations application with full create, read, update and delete flows." },
+      { heading: "Why", text: "Built to practice clean component architecture, routing patterns, and REST API integration in React." },
+      { heading: "How", text: "Used React Router for dynamic routing, React-Bootstrap for responsive UI, and JSON Server as a mock REST backend with hooks for state." },
     ],
   },
   {
     icon: <MessageSquare size={38} />,
     title: "Real-Time Chat Application",
-    description: "Socket.IO powered chat system with instant messaging.",
-    tags: ["Socket.IO", "Node.js", "WebSockets"],
+    description: "Socket.IO powered chat system with instant bi-directional messaging.",
+    tags: ["Socket.IO", "Node.js", "Express", "WebSockets"],
     links: [
-      { label: "Live Demo", icon: "external-link", url: "https://your-live-link.com" },
-      { label: "GitHub", icon: "github", url: "https://github.com/your-repo" },
+      { label: "GitHub", icon: "github", url: "https://github.com/Arjun-000" },
     ],
     sections: [
-      { heading: "What", text: "Lightweight chat application enabling real-time communication between users." },
-      { heading: "Why", text: "Created to explore WebSocket architecture and event-driven programming." },
-      { heading: "How", text: "Implemented using Node.js, Express, and Socket.IO without heavy authentication layers." },
+      { heading: "What", text: "A lightweight chat application enabling real-time messaging between connected users." },
+      { heading: "Why", text: "Created to explore WebSocket architecture and event-driven backend programming." },
+      { heading: "How", text: "Built with Node.js, Express, and Socket.IO using room-based channels and event emitters." },
     ],
   },
 ];
@@ -130,18 +127,18 @@ const ProjectCard = ({ project }: { project: Project }) => {
 
 const Projects = () => {
   return (
-    <section id="projects" className="section-secondary py-[120px] px-6 md:px-12">
+    <section id="projects" className="section-secondary py-20 md:py-[120px] px-4 sm:px-6 md:px-12">
       <div className="max-w-[1200px] mx-auto">
         <ScrollReveal>
-          <div className="mb-10">
-            <h2 className="font-heading text-3xl font-bold text-primary mb-3">Selected Projects</h2>
-            <p className="text-muted-foreground text-lg max-w-[600px]">
+          <div className="mb-8 md:mb-10">
+            <h2 className="font-heading text-2xl sm:text-3xl font-bold text-primary mb-3">Selected Projects</h2>
+            <p className="text-muted-foreground text-base sm:text-lg max-w-[600px]">
               Engineered with scalability, performance, and clean architecture in mind.
             </p>
           </div>
         </ScrollReveal>
         <ScrollReveal delay={0.15}>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {projects.map((p) => (
               <ProjectCard key={p.title} project={p} />
             ))}
